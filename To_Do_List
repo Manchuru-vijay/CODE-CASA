@@ -1,0 +1,185 @@
+// Html Code
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>To-Do List</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="container">
+      <div class="heading">
+        <h1 class="heading__title">To-Do List</h1>
+      </div>
+      <form class="form">
+        <div>
+          <label class="form__label" for="todo">~ Today I need to ~</label>
+          <input class="form__input"
+               type="text"
+               id="todo"
+               name="to-do"
+               size="30"
+               required>
+          <button class="button"><span>Submit</span></button>
+        </div>
+      </form>
+      <div>
+        <ul class="toDoList">
+        </ul>
+      </div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>
+// Css Code
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Caveat:wght@400;700&family=Lobster&family=Monoton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,700&display=swap');
+body {
+  background-color: #ccd1d1;
+  min-height: 80vh;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e74c3c;
+  font-family: "Californian dark";
+  text-align: center;
+  font-size: 130%;
+}
+
+@media only screen and (min-width: 500px) {
+  body {
+    min-height: 100vh;
+  }
+}
+.container {
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  max-width: 500px;
+  min-width: 250px;
+  background: #2c3e50;
+  background-size: 25px 25px;
+  border-radius: 20px;
+  box-shadow: 4px 3px 7px 2px #ba4a00;
+  padding: 1rem;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.heading__title {
+  padding: 0.4rem 1.5rem;
+  background-color: rgba(0, 255, 196, 0.7);
+  font-size: 1rem;
+}
+
+@media only screen and (min-width: 500px) {
+  .heading__title {
+    font-size: 2rem;
+  }
+}
+.heading__img {
+  width: 50%;
+}
+
+.form__label {
+  margin-bottom: 0.5rem;
+}
+
+.form__input {
+  box-sizing: border-box;
+  background-color: transparent;
+  padding: 0.5rem;
+  border-bottom-right-radius: 25px 3.6px;
+  border-bottom-left-radius: 2.5px 20px;
+  border: solid 3px transparent;
+  border-bottom: dashed 3px #ea95e0;
+  font-family: "Californian dark";
+  font-size: 1.5rem;
+  color: rgba(63, 62, 65, 0.7);
+  width: 75%;
+  margin-bottom: 30px;
+}
+@media only screen and (min-width: 500px) {
+  .form__input {
+    width: 95%;
+  }
+}
+.button {
+  transform-origin: center;
+  font-family: "Californian FB";
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-radius: 5px;
+  box-shadow: 0 1px 0 #494a4b;
+}
+
+.button span {
+  background:#f1c40f;
+  padding: 0.7rem 1.3rem;
+  border-radius: 10px;
+  border: 5px solid #494a4b;
+}
+
+.button:active, .button:focus {
+  transform: translatex(4px);
+  padding-bottom: 0px;
+  outline: 0;
+}
+
+.toDoList {
+  text-align: left;
+}
+.toDoList li {
+  position: relative;
+  padding: 0.5rem;
+}
+.toDoList li:hover {
+  text-decoration: line-through line #5dade2;
+}
+// JavaScript
+(() => {
+  let toDoListArray = [];
+  const form = document.querySelector(".form");
+  const input = form.querySelector(".form__input");
+  const ul = document.querySelector(".toDoList");
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let itemId = String(Date.now());
+    let toDoItem = input.value;
+    addItemToDOM(itemId , toDoItem);
+    addItemToArray(itemId, toDoItem);
+    input.value = '';
+  });
+
+  ul.addEventListener('click', e => {
+    let id = e.target.getAttribute('data-id');
+    if (!id) return;
+    removeItemFromDOM(id);
+    removeItemFromArray(id);
+  });
+  function addItemToDOM(itemId, toDoItem) {
+    const li = document.createElement('li');
+    li.setAttribute("data-id", itemId);
+    li.innerText = toDoItem;
+    ul.appendChild(li);
+  }
+  function addItemToArray(itemId, toDoItem) {
+    toDoListArray.push({ itemId, toDoItem});
+    console.log(toDoListArray);
+  }
+  function removeItemFromDOM(id) {
+    var li = document.querySelector('[data-id="' + id + '"]');
+    ul.removeChild(li);
+  }
+  function removeItemFromArray(id) {
+    toDoListArray = toDoListArray.filter(item => item.itemId !== id);
+    console.log(toDoListArray);
+  }
+})();
